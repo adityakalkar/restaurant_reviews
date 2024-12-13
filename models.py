@@ -53,45 +53,39 @@ def create_review(restaurant_name, rating, comment, user_id, username):
 
 
 def get_all_reviews():
-    """Retrieve all reviews from the database."""
     return reviews.find().sort('timestamp', -1)
 
 def get_reviews_by_user(user_id):
-    """Retrieve all reviews submitted by a specific user."""
-    return reviews.find({'user_id': user_id}).sort('timestamp', -1)  # Most recent first
+    return reviews.find({'user_id': user_id}).sort('timestamp', -1)  
 
 def find_review_by_id(review_id):
-    """Find a review by its ID."""
     return reviews.find_one({'_id': ObjectId(review_id)})
 
 def update_review(review_id, rating, comment):
-    """Update an existing review."""
     return reviews.update_one(
         {'_id': ObjectId(review_id)},
         {'$set': {'rating': rating, 'comment': comment, 'timestamp': datetime.utcnow()}}
     )
 
 def delete_review(review_id):
-    """Delete a review by its ID."""
     return reviews.delete_one({'_id': ObjectId(review_id)})
 
 
-# Yelp API Function
+
 def search_restaurants(term, location, limit=10):
-    """Search for restaurants using Yelp Fusion API."""
     url = "https://api.yelp.com/v3/businesses/search"
     headers = {
         "Authorization": f"Bearer {YELP_API_KEY}"
     }
     params = {
-        "term": term,       # Search term, e.g., "Pizza"
-        "location": location,  # Location, e.g., "San Francisco"
-        "limit": limit      # Number of results to return
+        "term": term,       
+        "location": location, 
+        "limit": limit     
     }
     
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
-        return response.json().get('businesses', [])  # Return list of businesses
+        return response.json().get('businesses', [])  
     else:
-        print(f"Error: {response.status_code}, {response.text}")  # Debugging
+        print(f"Error: {response.status_code}, {response.text}") 
         return []

@@ -22,7 +22,7 @@ bcrypt = Bcrypt(app)
 @app.route('/')
 def home():
     """Render the homepage."""
-    return render_template('base.html', businesses=None)  # No default businesses
+    return render_template('base.html', businesses=None)  
 
 
 
@@ -86,7 +86,7 @@ def my_reviews():
         flash('Please log in to view your reviews.', 'danger')
         return redirect(url_for('login'))
 
-    user_reviews = list(get_reviews_by_user(session['user_id']))  # Fetch reviews for the current user
+    user_reviews = list(get_reviews_by_user(session['user_id']))  
     return render_template('my_reviews.html', reviews=user_reviews)
 
 
@@ -110,7 +110,7 @@ def edit_review(review_id):
         flash('Your review has been updated!', 'success')
         return redirect(url_for('my_reviews'))
 
-    # Pre-fill the form with the current review data
+
     form.rating.data = review['rating']
     form.comment.data = review['comment']
     return render_template('edit_review.html', form=form, review=review)
