@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Search Results</title>
+</head>
+
+<body>
+    <a href="{{ url_for('home') }}">Home</a>
+    <h1>Search Results</h1>
+    {% if businesses %}
+    <ul>
+        {% for business in businesses %}
+        <li>
+            <h2>{{ business['name'] }}</h2>
+            <img src="{{ business['image_url'] }}" alt="{{ business['name'] }}" width="200">
+            <p>Rating: {{ business['rating'] }}/5</p>
+            <p>Reviews: {{ business['review_count'] }}</p>
+            <p>Address: {{ ', '.join(business['location']['display_address']) }}</p>
+            <p>Phone: {{ business['display_phone'] }}</p>
+            <a href="{{ business['url'] }}" target="_blank">View on Yelp</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No restaurants found. Please try a different search term or location.</p>
+    {% endif %}
+</body>
+
+</html>

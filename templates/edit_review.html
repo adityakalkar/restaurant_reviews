@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit Review</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('home') }}" class="text-white text-lg font-bold">Home</a>
+            <div class="space-x-4">
+                <a href="{{ url_for('my_reviews') }}" class="text-gray-300 hover:text-white">My Reviews</a>
+                <a href="{{ url_for('logout') }}" class="text-red-500 hover:text-white">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-8 p-4">
+        <h1 class="text-3xl font-bold mb-6">Edit Your Review</h1>
+        <form method="POST" class="space-y-6 bg-white shadow-md rounded p-6 max-w-lg mx-auto">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="rating" class="block text-gray-700 font-bold mb-2">{{ form.rating.label }}</label>
+                {{ form.rating(class="w-full p-2 border border-gray-300 rounded") }}
+            </div>
+            <div>
+                <label for="comment" class="block text-gray-700 font-bold mb-2">{{ form.comment.label }}</label>
+                {{ form.comment(class="w-full p-2 border border-gray-300 rounded h-32") }}
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update
+                    Review</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

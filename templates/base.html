@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Restaurant Review Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('home') }}" class="text-white text-lg font-bold">Restaurant Reviews</a>
+            <div class="space-x-4">
+                {% if 'user_id' in session %}
+                <span class="text-gray-300">Welcome, {{ session['username'] }}!</span>
+                <a href="{{ url_for('add_review') }}" class="text-gray-300 hover:text-white">Write a Review</a>
+                <a href="{{ url_for('my_reviews') }}" class="text-gray-300 hover:text-white">My Reviews</a>
+                <a href="{{ url_for('logout') }}" class="text-red-500 hover:text-white">Logout</a>
+                {% else %}
+                <a href="{{ url_for('register') }}" class="text-gray-300 hover:text-white">Register</a>
+                <a href="{{ url_for('login') }}" class="text-gray-300 hover:text-white">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-8 p-4">
+        <!-- Welcome Message -->
+        <h1 class="text-3xl font-bold mb-6">Welcome to the Restaurant Review Platform</h1>
+
+        <!-- Search Bar -->
+        <form method="POST" action="{{ url_for('search') }}" class="flex space-x-4 mb-6">
+            <input type="text" id="term" name="term" placeholder="e.g., Pizza"
+                class="w-1/3 p-2 border border-gray-300 rounded" required>
+            <input type="text" id="location" name="location" placeholder="e.g., San Francisco"
+                class="w-1/3 p-2 border border-gray-300 rounded" required>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+        </form>
+
+        <!-- Display Search Results -->
+        {% if businesses %}
+        <h2 class="text-2xl font-bold mb-4">Search Results</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for business in businesses %}
+            <div class="bg-white shadow-md rounded p-4">
+                <img src="{{ business['image_url'] }}" alt="{{ business['name'] }}"
+                    class="rounded w-full h-48 object-cover">
+                <h3 class="text-lg font-bold mt-2">{{ business['name'] }}</h3>
+                <p class="text-gray-600">Rating: {{ business['rating'] }}/5</p>
+                <p class="text-gray-600">Reviews: {{ business['review_count'] }}</p>
+                <p class="text-gray-600">Address: {{ ', '.join(business['location']['display_address']) }}</p>
+                <p class="text-gray-600">Phone: {{ business['display_phone'] }}</p>
+                <a href="{{ business['url'] }}" target="_blank" class="text-blue-500 hover:underline">View on Yelp</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% elif businesses is not none %}
+        <p class="text-gray-600">No restaurants found. Try a different search term or location.</p>
+        {% endif %}
+
+        <!-- Display User Reviews -->
+        {% if reviews %}
+        <h2 class="text-2xl font-bold mt-8 mb-4">Latest User Reviews</h2>
+        <ul class="space-y-4">
+            {% for review in reviews %}
+            <li class="bg-white shadow-md rounded p-4">
+                <h3 class="text-lg font-bold">{{ review['restaurant_name'] }}</h3>
+                <p class="text-gray-600">Rating: {{ review['rating'] }}/5</p>
+                <p class="text-gray-600">Comment: {{ review['comment'] }}</p>
+                <p class="text-gray-500 text-sm">By: {{ review['username'] }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+
+</html>
